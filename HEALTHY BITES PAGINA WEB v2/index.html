@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nutrition Planner MVP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+
+        input, button {
+            margin: 5px 0;
+            padding: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .section {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .logo-img {
+            width: 180px;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+      <img src="img/bite.png" alt="Nutrition Planner Logo" class="logo-img">
+      <h1>Nutrition Planner</h1>
+    </div>
+
+<!-- registro-->
+<div class="section" id="registerSection">
+    <h2>Register</h2>
+    <input type="text" id="regUser" placeholder="Username"><br>
+    <input type="password" id="regPass" placeholder="Password"><br>
+    <button onclick="register()">Register</button>
+</div>
+
+<!-- Login -->
+<div class="section" id="loginSection">
+    <h2>Login</h2>
+    <input type="text" id="loginUser" placeholder="Username"><br>
+    <input type="password" id="loginPass" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+</div>
+
+<!-- Perfil -->
+<!-- Profile -->
+<div class="section hidden" id="profileSection">
+    <h2>Profile</h2>
+
+    <input type="number" id="weight" placeholder="Weight (kg)"><br>
+    <input type="number" id="height" placeholder="Height (m)" step="0.01"><br>
+
+    <h3>Health Conditions</h3>
+
+    <label>
+        <input type="checkbox" id="diabetes"> Diabetes
+    </label><br>
+
+    <label>
+        <input type="checkbox" id="vegetarian"> Vegetarian
+    </label><br>
+
+    <label>
+        <input type="checkbox" id="lactose"> Lactose Intolerance
+    </label><br>
+
+    <label>
+        <input type="checkbox" id="gluten"> Gluten Intolerance
+    </label><br>
+
+    <input type="text" id="allergies" placeholder="Other allergies"><br><br>
+
+    <button onclick="calculateBMI()">Calculate BMI</button>
+
+    <p id="bmiResult"></p>
+</div>
+
+<!-- Recetas para el usuario -->
+<div class="section hidden" id="recipesSection">
+    <h2>Recipes</h2>
+    <ul id="recipeList"></ul>
+</div>
+
+<!-- lista de compras -->
+<div class="section hidden" id="shoppingSection">
+    <h2>Shopping List</h2>
+    <ul id="shoppingList"></ul>
+</div>
+
+<script>
+    let storedUser = null;
+    let storedPass = null;
+    let weeklyPlan = [];
+
+    const recipes = [
+        {name: "Chicken Salad", ingredients: ["Chicken", "Lettuce", "Tomato"]},
+        {name: "Oatmeal Bowl", ingredients: ["Oats", "Milk", "Banana"]},
+        {name: "Vegetable Soup", ingredients: ["Carrot", "Potato", "Onion"]}
+    ];
+
+    function register() {
+        storedUser = document.getElementById("regUser").value;
+        storedPass = document.getElementById("regPass").value;
+        alert("User registered successfully!");
+    }
+
+    function login() {
+        const user = document.getElementById("loginUser").value;
+        const pass = document.getElementById("loginPass").value;
+
+        if (user === storedUser && pass === storedPass) {
+            alert("Login successful!");
+            document.getElementById("profileSection").classList.remove("hidden");
+            document.getElementById("recipesSection").classList.remove("hidden");
+            document.getElementById("shoppingSection").classList.remove("hidden");
+            loadRecipes();
+        } else {
+            alert("Invalid credentials");
+        }
+    }
+
+    function calculateBMI() {
+    const weight = parseFloat(document.getElementById("weight").value);
+    const height = parseFloat(document.getElementById("height").value);
+
+    const bmi = weight / (height * height);
+    let classification = "";
+    let recommendation = "";
+
+    if (bmi < 18.5) {
+        classification = "Underweight";
+        recommendation = "You should consider increasing calorie intake.";
+    } else if (bmi < 25) {
+        classification = "Normal weight";
+        recommendation = "Maintain a balanced diet.";
+    } else {
+        classification = "Overweight";
+        recommendation = "Consider reducing calorie intake.";
+    }
+
+    // Health conditions
+    if (document.getElementById("diabetes").checked) {
+        recommendation += " Avoid high sugar foods.";
+    }
+
+    if (document.getElementById("vegetarian").checked) {
+        recommendation += " Recommended vegetarian recipes will be prioritized.";
+    }
+
+    if (document.getElementById("lactose").checked) {
+        recommendation += " Avoid dairy products.";
+    }
+
+    if (document.getElementById("gluten").checked) {
+        recommendation += " Avoid gluten-based foods.";
+    }
+
+    const allergies = document.getElementById("allergies").value;
+    if (allergies) {
+        recommendation += " Avoid: " + allergies + ".";
+    }
+
+    document.getElementById("bmiResult").innerText =
+        "BMI: " + bmi.toFixed(2) + " (" + classification + "). " + recommendation;
+}
+
+    function loadRecipes() {
+        const list = document.getElementById("recipeList");
+        list.innerHTML = "";
+
+        recipes.forEach((recipe, index) => {
+            const li = document.createElement("li");
+            li.innerHTML = recipe.name + 
+                " <button onclick='addToPlan(" + index + ")'>Add</button>";
+            list.appendChild(li);
+        });
+    }
+
+    function addToPlan(index) {
+        weeklyPlan.push(recipes[index]);
+        updateShoppingList();
+    }
+
+    function updateShoppingList() {
+        const list = document.getElementById("shoppingList");
+        list.innerHTML = "";
+
+        let ingredients = [];
+
+        weeklyPlan.forEach(recipe => {
+            ingredients = ingredients.concat(recipe.ingredients);
+        });
+
+        const uniqueIngredients = [...new Set(ingredients)];
+
+        uniqueIngredients.forEach(item => {
+            const li = document.createElement("li");
+            li.innerText = item;
+            list.appendChild(li);
+        });
+    }
+</script>
+
+</body>
+</html>
