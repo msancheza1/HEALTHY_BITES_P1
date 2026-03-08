@@ -2,22 +2,46 @@
 
 {% block content %}
 
-<h2>{{ recipe.name }}</h2>
+<div class="d-flex justify-content-center">
 
-{% if recipe.image %}
-    <img src="{{ recipe.image.url }}" width="300" style="margin-bottom:20px;">
-{% endif %}
+    <div class="card shadow-lg p-4" style="max-width:900px; width:100%; border-radius:20px;">
 
-<p><strong>Description:</strong></p>
-<p>{{ recipe.description }}</p>
+        <h2 class="text-center mb-4 text-success">
+            {{ recipe.name }}
+        </h2>
 
-<p><strong>Ingredients:</strong></p>
-<p>{{ recipe.ingredients|linebreaks }}</p>
+        {% if recipe.image %}
+            <div class="text-center mb-4">
+                <img src="{{ recipe.image.url }}"
+                     class="img-fluid rounded"
+                     style="max-height:400px; object-fit:cover;">
+            </div>
+        {% endif %}
 
-<p><strong>Preparation Steps:</strong></p>
-<p>{{ recipe.instructions|linebreaks }}</p>
+        <hr>
 
-<br>
-<a href="{% url 'home' %}">← Back to Home</a>
+        <h5 class="text-success">Description</h5>
+        <p>{{ recipe.description }}</p>
+
+        <hr>
+
+        <h5 class="text-success">Ingredients</h5>
+        <p>{{ recipe.ingredients|linebreaks }}</p>
+
+        <hr>
+
+        <h5 class="text-success">Preparation Steps</h5>
+        <p>{{ recipe.instructions|linebreaks }}</p>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'home' %}"
+               class="btn btn-outline-success">
+               ← Back to Home
+            </a>
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}
