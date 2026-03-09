@@ -101,6 +101,7 @@ def add_favorite(request, recipe_id):
 def my_favorites(request):
     favorites = Favorite.objects.filter(user=request.user)
     return render(request, 'planner/my_favorites.html', {'favorites': favorites})
+## nueva funcion 
 
 @login_required #debes estar logeado para poder acceder a esto
 def remove_favorite(request, recipe_id):
