@@ -9,6 +9,7 @@ urlpatterns = [
     path('favorite/<int:recipe_id>/', views.add_favorite, name='add_favorite'),
     path('favorite/remove/<int:recipe_id>/', views.remove_favorite, name='remove_favorite'),
     path('favorites/', views.my_favorites, name='my_favorites'),
+    path('search/', views.search, name='search'),
 ]
 
 #las urls para poner ir a distintas partes dentro de la pagina web

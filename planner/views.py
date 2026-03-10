@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Recipe
 from .forms import UserProfileForm
+from django.db.models import Q
 
 
 def home(request):
@@ -124,3 +125,42 @@ def my_favorites(request):
 def remove_favorite(request, recipe_id):
     Favorite.objects.filter(user=request.user, recipe_id=recipe_id).delete()
     return redirect('my_favorites')
+
+##Buscador de recetas
+def search(request):
+    q = (request.GET.get("q") or "").strip()
+
+    recipes = Recipe.objects.all()
+
+    if request.user.is_authenticated:
+        try:
+            profile = request.user.userprofile
+
+            if profile.vegetarian:
+                recipes = recipes.filter(vegetarian=True)
+
+            if profile.diabetes:
+                recipes = recipes.filter(diabetic_friendly=True)
+
+            if profile.lactose_intolerant:
+                recipes = recipes.filter(lactose_free=True)
+
+            if profile.gluten_intolerant:
+                recipes = recipes.filter(gluten_free=True)
+
+            category = profile.bmi_category()
+            if category == "overweight":
+                recipes = recipes.filter(healthy=True)
+
+        except:
+            return redirect('profile')
+
+    # Aplicar búsqueda
+    if q:
+        recipes = recipes.filter(
+            Q(name__icontains=q) |
+            Q(description__icontains=q) |
+            Q(ingredients__icontains=q)
+        )
+
+    return render(request, "planner/search_results.html", {"recipes": recipes, "q": q})

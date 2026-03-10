@@ -94,6 +94,22 @@
             </span>
         </a>
 
+        
+        <form class="d-flex align-items-center me-3"
+              method="get"
+              action="{% url 'search' %}"
+              style="max-width: 420px; width: 100%;">
+            <input class="form-control form-control-sm me-2"
+                   type="search"
+                   name="q"
+                   placeholder="Search recipes..."
+                   aria-label="Search"
+                   value="{{ request.GET.q|default:'' }}">
+            <button class="btn btn-outline-success btn-sm" type="submit">
+                Search
+            </button>
+        </form>
+
         <div>
 
             {% if user.is_authenticated %}
