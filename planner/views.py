@@ -43,9 +43,26 @@ def home(request):
             # Si no tiene perfil, lo enviamos a completarlo
             return redirect('profile')
 
+    bmi_info = None
+    if request.user.is_authenticated:
+        try:
+            profile = request.user.userprofile
+            bmi_info = {
+                'value': profile.bmi(),
+                'category': profile.bmi_category(),
+                'ideal_min': profile.ideal_weight_min(),
+                'ideal_max': profile.ideal_weight_max(),
+                'difference': profile.weight_difference(),
+                'current_weight': profile.weight,
+                'height_cm': int(profile.height * 100),
+            }
+        except:
+            pass
+
     context = {
         'recipes': recipes,
-        'bmi': bmi
+        'bmi': bmi,
+        'bmi_info': bmi_info,
     }
 
     return render(request, 'planner/home.html', context)

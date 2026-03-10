@@ -21,10 +21,28 @@ class UserProfile(models.Model):
 
         if bmi_value < 18.5:
             return "underweight"
-        elif 18.5 <= bmi_value < 25: #segun el BMI calculado determinar si el usuario tiene sobrepeso, esta en el peso ideal o esta por debajo del peso ideal
+        elif 18.5 <= bmi_value < 25:
             return "normal"
         else:
             return "overweight"
+
+    def ideal_weight_min(self):
+        """Peso mínimo ideal (IMC 18.5) para la altura del usuario"""
+        return round(18.5 * (self.height ** 2), 1)
+
+    def ideal_weight_max(self):
+        """Peso máximo ideal (IMC 24.9) para la altura del usuario"""
+        return round(24.9 * (self.height ** 2), 1)
+
+    def weight_difference(self):
+        """Diferencia entre peso actual y rango ideal (negativo = debe subir, positivo = debe bajar)"""
+        bmi_value = self.bmi()
+        if bmi_value < 18.5:
+            return round(self.ideal_weight_min() - self.weight, 1)  # cuánto le falta
+        elif bmi_value > 24.9:
+            return round(self.weight - self.ideal_weight_max(), 1)  # cuánto le sobra
+        else:
+            return 0  # está en rango ideal
 
     def __str__(self):
         return self.user.username

@@ -4,10 +4,126 @@
 
 <div class="container">
 
-    {% if bmi %}
-        <div class="alert alert-success text-center shadow-sm mb-4">
-            <strong>Your BMI:</strong> {{ bmi }}
+    {% if bmi_info %}
+    <!-- Banner BMI clickeable -->
+    <div class="mb-4" id="bmi-banner-wrapper">
+
+        <div class="alert alert-success text-center shadow-sm mb-0 d-flex justify-content-between align-items-center"
+             onclick="document.getElementById('bmi-detail').classList.toggle('d-none')"
+             style="cursor: pointer; border-radius: 10px 10px 10px 10px; transition: border-radius 0.2s;"
+             id="bmi-banner-top">
+
+            <span>
+                <strong>Your BMI: {{ bmi_info.value }}</strong>
+                &nbsp;—&nbsp;
+                {% if bmi_info.category == "normal" %}
+                    <span class="text-success">✅ Normal weight</span>
+                {% elif bmi_info.category == "underweight" %}
+                    <span class="text-warning">⚠️ Underweight</span>
+                {% else %}
+                    <span class="text-danger">⚠️ Overweight</span>
+                {% endif %}
+            </span>
+
+            <small class="text-muted">Click for details ▼</small>
+
         </div>
+
+        <!-- Panel expandible -->
+        <div id="bmi-detail" class="d-none"
+             style="background: #fff; border: 1px solid #a5d6a7; border-top: none;
+                    border-radius: 0 0 10px 10px; padding: 20px 24px;">
+
+            <!-- 3 cards de datos -->
+            <div class="row g-3 mb-3">
+
+                <!-- Peso actual -->
+                <div class="col-md-4">
+                    <div class="card text-center border shadow-sm h-100">
+                        <div class="card-body">
+                            <p class="text-muted small mb-1">Current weight</p>
+                            <h3 class="fw-bold">{{ bmi_info.current_weight }} kg</h3>
+                            <p class="text-muted small mb-0">Height: {{ bmi_info.height_cm }} cm</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rango ideal -->
+                <div class="col-md-4">
+                    <div class="card text-center border border-success shadow-sm h-100"
+                         style="background: #e8f5e9;">
+                        <div class="card-body">
+                            <p class="text-muted small mb-1">Ideal weight range</p>
+                            <h3 class="fw-bold text-success">
+                                {{ bmi_info.ideal_min }} – {{ bmi_info.ideal_max }} kg
+                            </h3>
+                            <p class="text-muted small mb-0">BMI 18.5 – 24.9</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Diferencia / Estado -->
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm h-100
+                        {% if bmi_info.category == 'normal' %}border-success{% else %}border-warning{% endif %}"
+                         style="background: {% if bmi_info.category == 'normal' %}#e8f5e9{% else %}#fff8e1{% endif %};">
+                        <div class="card-body">
+                            <p class="text-muted small mb-1">
+                                {% if bmi_info.category == "normal" %}Status
+                                {% elif bmi_info.category == "underweight" %}Need to gain
+                                {% else %}Need to lose{% endif %}
+                            </p>
+                            <h3 class="fw-bold
+                                {% if bmi_info.category == 'normal' %}text-success
+                                {% else %}text-warning{% endif %}">
+                                {% if bmi_info.category == "normal" %}
+                                    ✓ On track!
+                                {% else %}
+                                    {{ bmi_info.difference }} kg
+                                {% endif %}
+                            </h3>
+                            <p class="text-muted small mb-0">
+                                {% if bmi_info.category == "normal" %}You're in the healthy range!
+                                {% else %}to reach healthy range{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Barra visual IMC -->
+            <div class="mt-2">
+                <p class="text-muted small mb-1">BMI Scale</p>
+
+                <div style="position: relative; height: 20px; border-radius: 10px; overflow: visible;
+                            background: linear-gradient(to right, #42a5f5 0%, #66bb6a 30%, #ffca28 65%, #ef5350 100%);">
+
+                    <!-- Marcador de posición del usuario -->
+                    {% with pos=bmi_info.value %}
+                    <div style="position: absolute; top: -5px; bottom: -5px; width: 4px;
+                                background: #222; border-radius: 4px; border: 2px solid white;
+                                left: clamp(0%, calc(({{ pos }} - 10) / 30 * 100%), 100%);">
+                    </div>
+                    {% endwith %}
+
+                </div>
+
+                <div class="d-flex justify-content-between mt-1">
+                    <small class="text-muted">Underweight<br>&lt;18.5</small>
+                    <small class="text-muted text-center">Normal<br>18.5–24.9</small>
+                    <small class="text-muted text-center">Overweight<br>25–29.9</small>
+                    <small class="text-muted text-end">Obese<br>&gt;30</small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% elif bmi %}
+    <!-- Fallback si bmi_info no está disponible -->
+    <div class="alert alert-success text-center shadow-sm mb-4">
+        <strong>Your BMI:</strong> {{ bmi }}
+    </div>
     {% endif %}
 
     <h2 class="text-center mb-5 text-success">
