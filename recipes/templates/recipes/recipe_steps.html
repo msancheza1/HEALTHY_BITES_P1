@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center">
+    <div class="card shadow-lg p-4" style="max-width:700px; width:100%; border-radius:20px;">
+
+        <h4 class="text-center text-success mb-1">{{ recipe.name }}</h4>
+        <p class="text-center text-muted small mb-3">Step {{ current }} of {{ total }}</p>
+
+        <div class="progress mb-4" style="height:10px; border-radius:10px;">
+            <div class="progress-bar bg-success" role="progressbar"
+                 style="width: {% widthratio current total 100 %}%;"
+                 aria-valuenow="{{ current }}" aria-valuemin="0" aria-valuemax="100">
+            </div>
+        </div>
+
+        <div class="card border-success mb-4" style="border-radius:12px;">
+            <div class="card-body p-4">
+                <span class="badge bg-success mb-3" style="font-size:14px;">
+                    Step {{ current }}
+                </span>
+                <p class="text-muted mb-0" style="font-size:16px; line-height:1.6;">
+                    {{ step_text }}
+                </p>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            {% if has_prev %}
+                <a href="?step={{ prev_num }}" class="btn btn-outline-success">← Previous</a>
+            {% else %}
+                <button class="btn btn-outline-secondary" disabled>← Previous</button>
+            {% endif %}
+
+            <small class="text-muted">{{ current }} / {{ total }}</small>
+
+            {% if has_next %}
+                <a href="?step={{ next_num }}" class="btn btn-success">Next →</a>
+            {% else %}
+                <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="btn btn-success">✅ Finish</a>
+            {% endif %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="text-muted small">
+                ← Back to recipe
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
