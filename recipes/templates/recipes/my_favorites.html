@@ -1,4 +1,4 @@
-{% extends 'planner/base.html' %}
+{% extends 'base/base.html' %}
 
 {% block content %}
 
@@ -26,7 +26,7 @@
 
                     <h5 class="card-title text-center">
 
-                        <a href="{% url 'recipe_detail' favorite.recipe.id %}"
+                        <a href="{% url 'recipes:recipe_detail' favorite.recipe.id %}"
                            class="text-decoration-none text-dark">
 
                            {{ favorite.recipe.name }}
@@ -41,12 +41,12 @@
 
                     <div class="mt-auto text-center">
 
-                        <a href="{% url 'recipe_detail' favorite.recipe.id %}"
+                        <a href="{% url 'recipes:recipe_detail' favorite.recipe.id %}"
                            class="btn btn-success btn-sm me-2">
                            View Recipe
                         </a>
 
-                        <a href="{% url 'remove_favorite' favorite.recipe.id %}"
+                        <a href="{% url 'recipes:remove_favorite' favorite.recipe.id %}"
                            class="btn btn-outline-danger btn-sm">
                            Remove
                         </a>
@@ -73,7 +73,7 @@
                     Start exploring recipes and add them to your favorites.
                 </p>
 
-                <a href="{% url 'home' %}" class="btn btn-success">
+                <a href="{% url 'planner:home' %}" class="btn btn-success">
                     Browse Recipes
                 </a>
 

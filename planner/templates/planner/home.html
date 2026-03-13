@@ -1,4 +1,4 @@
-{% extends 'planner/base.html' %}
+{% extends 'base/base.html' %}
 
 {% block content %}
 
@@ -29,15 +29,11 @@
 
         </div>
 
-        <!-- Panel expandible -->
         <div id="bmi-detail" class="d-none"
              style="background: #fff; border: 1px solid #a5d6a7; border-top: none;
                     border-radius: 0 0 10px 10px; padding: 20px 24px;">
 
-            <!-- 3 cards de datos -->
             <div class="row g-3 mb-3">
-
-                <!-- Peso actual -->
                 <div class="col-md-4">
                     <div class="card text-center border shadow-sm h-100">
                         <div class="card-body">
@@ -47,8 +43,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Rango ideal -->
                 <div class="col-md-4">
                     <div class="card text-center border border-success shadow-sm h-100"
                          style="background: #e8f5e9;">
@@ -61,8 +55,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Diferencia / Estado -->
                 <div class="col-md-4">
                     <div class="card text-center shadow-sm h-100
                         {% if bmi_info.category == 'normal' %}border-success{% else %}border-warning{% endif %}"
@@ -89,17 +81,14 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Barra visual IMC -->
             <div class="mt-2">
                 <p class="text-muted small mb-1">BMI Scale</p>
 
                 <div style="position: relative; height: 20px; border-radius: 10px; overflow: visible;
                             background: linear-gradient(to right, #42a5f5 0%, #66bb6a 30%, #ffca28 65%, #ef5350 100%);">
 
-                    <!-- Marcador de posición del usuario -->
                     {% with pos=bmi_info.value %}
                     <div style="position: absolute; top: -5px; bottom: -5px; width: 4px;
                                 background: #222; border-radius: 4px; border: 2px solid white;
@@ -118,9 +107,9 @@
             </div>
 
         </div>
+
     </div>
     {% elif bmi %}
-    <!-- Fallback si bmi_info no está disponible -->
     <div class="alert alert-success text-center shadow-sm mb-4">
         <strong>Your BMI:</strong> {{ bmi }}
     </div>
@@ -148,7 +137,7 @@
 
                     <h5 class="card-title text-center">
 
-                        <a href="{% url 'recipe_detail' recipe.id %}"
+                        <a href="{% url 'recipes:recipe_detail' recipe.id %}"
                            class="text-decoration-none text-dark">
 
                            {{ recipe.name }}
@@ -163,13 +152,13 @@
 
                     <div class="mt-auto text-center">
 
-                        <a href="{% url 'recipe_detail' recipe.id %}"
+                        <a href="{% url 'recipes:recipe_detail' recipe.id %}"
                            class="btn btn-success btn-sm me-2">
                            View Recipe
                         </a>
 
                         {% if user.is_authenticated %}
-                        <a href="{% url 'add_favorite' recipe.id %}"
+                        <a href="{% url 'recipes:add_favorite' recipe.id %}"
                            class="btn btn-outline-warning btn-sm">
                            ⭐ Favorite
                         </a>

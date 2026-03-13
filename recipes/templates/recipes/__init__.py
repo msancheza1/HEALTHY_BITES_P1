@@ -1,4 +1,4 @@
-{% extends 'planner/base.html' %}
+{% extends 'base/base.html' %}
 
 {% block content %}
 
@@ -33,10 +33,12 @@
         <h5 class="text-success">Preparation Steps</h5>
         <p>{{ recipe.instructions|linebreaks }}</p>
 
-        <div class="text-center mt-4">
-            <a href="{% url 'home' %}"
-               class="btn btn-outline-success">
-               ← Back to Home
+        <div class="text-center mt-4 d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'home' %}" class="btn btn-outline-success">
+                ← Back to Home
+            </a>
+            <a href="{% url 'recipe_steps' recipe.id %}" class="btn btn-success">
+                📋 Step-by-step recipe
             </a>
         </div>
 

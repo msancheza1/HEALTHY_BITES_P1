@@ -1,4 +1,4 @@
-{% extends 'planner/base.html' %}
+{% extends 'base/base.html' %}
 
 {% block content %}
 <div class="container">
@@ -21,7 +21,7 @@
 
           <div class="card-body d-flex flex-column">
             <h5 class="card-title text-center">
-              <a href="{% url 'recipe_detail' recipe.id %}"
+              <a href="{% url 'recipes:recipe_detail' recipe.id %}"
                  class="text-decoration-none text-dark">
                 {{ recipe.name }}
               </a>
@@ -32,13 +32,13 @@
             </p>
 
             <div class="mt-auto text-center">
-              <a href="{% url 'recipe_detail' recipe.id %}"
+              <a href="{% url 'recipes:recipe_detail' recipe.id %}"
                  class="btn btn-success btn-sm me-2">
                 View Recipe
               </a>
 
               {% if user.is_authenticated %}
-                <a href="{% url 'add_favorite' recipe.id %}"
+                <a href="{% url 'recipes:add_favorite' recipe.id %}"
                    class="btn btn-outline-warning btn-sm">
                   ⭐ Favorite
                 </a>
