@@ -1,0 +1,49 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center">
+
+    <div class="card shadow-lg p-4" style="max-width:900px; width:100%; border-radius:20px;">
+
+        <h2 class="text-center mb-4 text-success">
+            {{ recipe.name }}
+        </h2>
+
+        {% if recipe.image %}
+            <div class="text-center mb-4">
+                <img src="{{ recipe.image.url }}"
+                     class="img-fluid rounded"
+                     style="max-height:400px; object-fit:cover;">
+            </div>
+        {% endif %}
+
+        <hr>
+
+        <h5 class="text-success">Description</h5>
+        <p>{{ recipe.description }}</p>
+
+        <hr>
+
+        <h5 class="text-success">Ingredients</h5>
+        <p>{{ recipe.ingredients|linebreaks }}</p>
+
+        <hr>
+
+        <h5 class="text-success">Preparation Steps</h5>
+        <p>{{ recipe.instructions|linebreaks }}</p>
+
+        <div class="text-center mt-4 d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'home' %}" class="btn btn-outline-success">
+                ← Back to Home
+            </a>
+            <a href="{% url 'recipe_steps' recipe.id %}" class="btn btn-success">
+                📋 Step-by-step recipe
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

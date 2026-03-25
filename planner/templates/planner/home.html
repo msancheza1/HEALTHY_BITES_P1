@@ -1,59 +1,199 @@
-{% extends 'planner/base.html' %}
+{% extends 'base/base.html' %}
 
 {% block content %}
 
-    {% if bmi %}
-        <div class="alert alert-info text-center">
-            <strong>Your BMI:</strong> {{ bmi }} <!--aqui donde obtiene el BMI y lo muestra en el home-->
+<div class="container">
+
+    {% if bmi_info %}
+    <!-- Banner BMI clickeable -->
+    <div class="mb-4" id="bmi-banner-wrapper">
+
+        <div class="alert alert-success text-center shadow-sm mb-0 d-flex justify-content-between align-items-center"
+             onclick="document.getElementById('bmi-detail').classList.toggle('d-none')"
+             style="cursor: pointer; border-radius: 10px 10px 10px 10px; transition: border-radius 0.2s;"
+             id="bmi-banner-top">
+
+            <span>
+                <strong>Your BMI: {{ bmi_info.value }}</strong>
+                &nbsp;—&nbsp;
+                {% if bmi_info.category == "normal" %}
+                    <span class="text-success">✅ Normal weight</span>
+                {% elif bmi_info.category == "underweight" %}
+                    <span class="text-warning">⚠️ Underweight</span>
+                {% else %}
+                    <span class="text-danger">⚠️ Overweight</span>
+                {% endif %}
+            </span>
+
+            <small class="text-muted">Click for details ▼</small>
+
         </div>
-    {% endif %}
 
-    <div class="row">
+        <div id="bmi-detail" class="d-none"
+             style="background: #fff; border: 1px solid #a5d6a7; border-top: none;
+                    border-radius: 0 0 10px 10px; padding: 20px 24px;">
 
-        {% for recipe in recipes %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-
-                    {% if recipe.image %}
-                        <img src="{{ recipe.image.url }}" 
-                             class="card-img-top" 
-                             style="height: 200px; object-fit: cover;">
-                    {% endif %}
-
-                    <div class="card-body d-flex flex-column">
-
-                        <h5 class="card-title">
-                            <a href="{% url 'recipe_detail' recipe.id %}" 
-                               class="text-decoration-none">
-                                {{ recipe.name }}
-                            </a>
-                        </h5>
-
-                        <p class="card-text">
-                            {{ recipe.description|truncatewords:20 }}
-                        </p>
-
-                        <div class="mt-auto text-center">
-                            <a href="{% url 'recipe_detail' recipe.id %}" 
-                               class="btn btn-primary btn-sm">
-                                View Recipe
-                            </a>
-                            {% if user.is_authenticated %}
-                                <a href="{% url 'add_favorite' recipe.id %}" 
-                                   class="btn btn-outline-warning btn-sm mt-2">
-                                    Add to Favorites
-                                </a>
-                            {% endif %}
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <div class="card text-center border shadow-sm h-100">
+                        <div class="card-body">
+                            <p class="text-muted small mb-1">Current weight</p>
+                            <h3 class="fw-bold">{{ bmi_info.current_weight }} kg</h3>
+                            <p class="text-muted small mb-0">Height: {{ bmi_info.height_cm }} cm</p>
                         </div>
-
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center border border-success shadow-sm h-100"
+                         style="background: #e8f5e9;">
+                        <div class="card-body">
+                            <p class="text-muted small mb-1">Ideal weight range</p>
+                            <h3 class="fw-bold text-success">
+                                {{ bmi_info.ideal_min }} – {{ bmi_info.ideal_max }} kg
+                            </h3>
+                            <p class="text-muted small mb-0">BMI 18.5 – 24.9</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm h-100
+                        {% if bmi_info.category == 'normal' %}border-success{% else %}border-warning{% endif %}"
+                         style="background: {% if bmi_info.category == 'normal' %}#e8f5e9{% else %}#fff8e1{% endif %};">
+                        <div class="card-body">
+                            <p class="text-muted small mb-1">
+                                {% if bmi_info.category == "normal" %}Status
+                                {% elif bmi_info.category == "underweight" %}Need to gain
+                                {% else %}Need to lose{% endif %}
+                            </p>
+                            <h3 class="fw-bold
+                                {% if bmi_info.category == 'normal' %}text-success
+                                {% else %}text-warning{% endif %}">
+                                {% if bmi_info.category == "normal" %}
+                                    ✓ On track!
+                                {% else %}
+                                    {{ bmi_info.difference }} kg
+                                {% endif %}
+                            </h3>
+                            <p class="text-muted small mb-0">
+                                {% if bmi_info.category == "normal" %}You're in the healthy range!
+                                {% else %}to reach healthy range{% endif %}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <div class="mt-2">
+                <p class="text-muted small mb-1">BMI Scale</p>
+
+                <div style="position: relative; height: 20px; border-radius: 10px; overflow: visible;
+                            background: linear-gradient(to right, #42a5f5 0%, #66bb6a 30%, #ffca28 65%, #ef5350 100%);">
+
+                    {% with pos=bmi_info.value %}
+                    <div style="position: absolute; top: -5px; bottom: -5px; width: 4px;
+                                background: #222; border-radius: 4px; border: 2px solid white;
+                                left: clamp(0%, calc(({{ pos }} - 10) / 30 * 100%), 100%);">
+                    </div>
+                    {% endwith %}
+
+                </div>
+
+                <div class="d-flex justify-content-between mt-1">
+                    <small class="text-muted">Underweight<br>&lt;18.5</small>
+                    <small class="text-muted text-center">Normal<br>18.5–24.9</small>
+                    <small class="text-muted text-center">Overweight<br>25–29.9</small>
+                    <small class="text-muted text-end">Obese<br>&gt;30</small>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    {% elif bmi %}
+    <div class="alert alert-success text-center shadow-sm mb-4">
+        <strong>Your BMI:</strong> {{ bmi }}
+    </div>
+    {% endif %}
+
+    <h2 class="text-center mb-5 text-success">
+        Healthy Recipes
+    </h2>
+
+    <div class="row g-4">
+
+        {% for recipe in recipes %}
+
+        <div class="col-md-4">
+
+            <div class="card h-100 shadow-lg border-0 recipe-card">
+
+                {% if recipe.image %}
+                    <img src="{{ recipe.image.url }}"
+                         class="card-img-top"
+                         style="height:220px; object-fit:cover;">
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+
+                    <h5 class="card-title text-center">
+
+                        <a href="{% url 'recipes:recipe_detail' recipe.id %}"
+                           class="text-decoration-none text-dark">
+
+                           {{ recipe.name }}
+
+                        </a>
+
+                    </h5>
+
+                    <p class="card-text text-muted text-center">
+                        {{ recipe.description|truncatewords:18 }}
+                    </p>
+
+                    <div class="mt-auto text-center">
+
+                        <a href="{% url 'recipes:recipe_detail' recipe.id %}"
+                           class="btn btn-success btn-sm me-2">
+                           View Recipe
+                        </a>
+
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'recipes:add_favorite' recipe.id %}"
+                           class="btn btn-outline-warning btn-sm">
+                           ⭐ Favorite
+                        </a>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
         {% empty %}
-            <p>No recipes available.</p>
+
+        <div class="col-12 text-center">
+
+            <div class="card shadow-sm p-5">
+
+                <h4 class="text-muted">
+                    No recipes available
+                </h4>
+
+                <p class="text-muted">
+                    Recipes will appear here once they are added.
+                </p>
+
+            </div>
+
+        </div>
+
         {% endfor %}
 
     </div>
+
+</div>
 
 {% endblock %}
