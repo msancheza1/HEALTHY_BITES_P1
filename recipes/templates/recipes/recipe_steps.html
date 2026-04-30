@@ -10,35 +10,54 @@
 
         <div class="progress mb-4" style="height:10px; border-radius:10px;">
             <div class="progress-bar bg-success" role="progressbar"
-                 style="width: {% widthratio current total 100 %}%;"
-                 aria-valuenow="{{ current }}" aria-valuemin="0" aria-valuemax="100">
+                style="width: {% widthratio current total 100 %}%;"
+                aria-valuenow="{{ current }}" aria-valuemin="0" aria-valuemax="100">
             </div>
+        </div>
+
+        <!-- IMAGEN -->
+        <div class="mb-4 text-center">
+
+            <img id="step-image"
+                src="{% if recipe.image %}{{ recipe.image.url }}{% endif %}"
+                alt="Step image"
+                class="img-fluid rounded"
+                style="max-height:280px; width:100%; object-fit:cover;">
+
+            <div id="image-loading" class="text-muted small mt-2">
+                Loading image...
+            </div>
+
         </div>
 
         <div class="card border-success mb-4" style="border-radius:12px;">
             <div class="card-body p-4">
-                <span class="badge bg-success mb-3" style="font-size:14px;">
-                    Step {{ current }}
-                </span>
+               <span class="badge bg-success mb-3" style="font-size:14px;">
+    {% if step.title %}
+        {{ step.title }}
+    {% else %}
+        Step {{ current }}
+    {% endif %}
+</span>
                 <p class="text-muted mb-0" style="font-size:16px; line-height:1.6;">
-                    {{ step_text }}
+                    {{ step.description|default:"No hay texto para este paso." }}
                 </p>
             </div>
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
             {% if has_prev %}
-                <a href="?step={{ prev_num }}" class="btn btn-outline-success">← Previous</a>
+            <a href="?step={{ prev_num }}" class="btn btn-outline-success">← Previous</a>
             {% else %}
-                <button class="btn btn-outline-secondary" disabled>← Previous</button>
+            <button class="btn btn-outline-secondary" disabled>← Previous</button>
             {% endif %}
 
             <small class="text-muted">{{ current }} / {{ total }}</small>
 
             {% if has_next %}
-                <a href="?step={{ next_num }}" class="btn btn-success">Next →</a>
+            <a href="?step={{ next_num }}" class="btn btn-success">Next →</a>
             {% else %}
-                <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="btn btn-success">✅ Finish</a>
+            <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="btn btn-success">✅ Finish</a>
             {% endif %}
         </div>
 
@@ -50,5 +69,59 @@
 
     </div>
 </div>
+
+<script>
+
+function extractKeywords(stepText, recipeName) {
+    const cookingWords = ['chop', 'sauté', 'boil', 'simmer', 'blend', 'bake', 'fry',
+        'mix', 'stir', 'cook', 'peel', 'slice', 'dice', 'roast'];
+
+    const words = stepText.toLowerCase().split(/\s+/);
+    const found = words.filter(w => cookingWords.includes(w));
+
+    if (found.length > 0) {
+        return `${found[0]} ${recipeName}`;
+    }
+
+    return recipeName;
+}
+
+
+async function loadStepImage() {
+    const stepText = `{{ step.description|escapejs }}`;
+    const recipeName = `{{ recipe.name|escapejs }}`;
+
+    const imgEl = document.getElementById('step-image');
+    const loadingEl = document.getElementById('image-loading');
+
+    if (!imgEl) return;
+
+
+    const keywords = extractKeywords(stepText, recipeName);
+
+    const query = encodeURIComponent(keywords + ' food cooking');
+
+    const ACCESS_KEY = 'Hw4t4hB25r2wXO36ZS5JX7FUkEhkPiLqEWn8pomOxe4';
+
+    const url = `https://api.unsplash.com/photos/random?query=${query}&orientation=landscape&client_id=${ACCESS_KEY}`;
+
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data && data.urls) {
+            imgEl.src = data.urls.regular + "&t=" + new Date().getTime();
+        }
+
+        if (loadingEl) loadingEl.style.display = 'none';
+
+    } catch (e) {
+        console.error("Error loading image:", e);
+        if (loadingEl) loadingEl.style.display = 'none';
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadStepImage);
+</script>
 
 {% endblock %}

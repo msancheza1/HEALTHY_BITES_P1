@@ -34,12 +34,30 @@
         <p>{{ recipe.instructions|linebreaks }}</p>
 
         <div class="text-center mt-4 d-flex justify-content-center gap-3 flex-wrap">
+
             <a href="{% url 'home' %}" class="btn btn-outline-success">
                 ← Back to Home
             </a>
+
             <a href="{% url 'recipes:recipe_steps' recipe.id %}" class="btn btn-success">
                 📋 Step-by-step recipe
             </a>
+
+            {# ✅ Botón de favorito — solo visible si está logueado #}
+            {% if user.is_authenticated %}
+                {% if is_favorite %}
+                    <a href="{% url 'recipes:remove_favorite' recipe.id %}"
+                       class="btn btn-danger">
+                        ❤️ Remove from Favorites
+                    </a>
+                {% else %}
+                    <a href="{% url 'recipes:add_favorite' recipe.id %}"
+                       class="btn btn-outline-danger">
+                        🤍 Add to Favorites
+                    </a>
+                {% endif %}
+            {% endif %}
+
         </div>
 
     </div>

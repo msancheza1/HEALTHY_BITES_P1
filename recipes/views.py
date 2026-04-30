@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Recipe, Favorite  # ← agregar Favorite aquí
+from types import SimpleNamespace
 
 
 def recipe_detail(request, id):
@@ -14,17 +15,60 @@ def recipe_detail(request, id):
     })
 
 
+import re
+
+def clean_steps(instructions):
+    # Líneas a ignorar por patrón
+    ignore_patterns = [
+        r'^preparation steps',
+        r'^the instructions',
+        r'^instructions',
+        r'^ingredients',
+        r'^pro tip',
+        r'^option [a-z]',
+        r'^note[:\s]',
+        r'^tip[:\s]',
+    ]
+    
+    steps = []
+    for line in instructions.split('\n'):
+        line = line.strip()
+        if not line:
+            continue
+        line_lower = line.lower()
+        if any(re.match(p, line_lower) for p in ignore_patterns):
+            continue
+        # Ignorar líneas muy cortas (menos de 15 caracteres) que no son pasos reales
+        if len(line) < 15:
+            continue
+        steps.append(line)
+    
+    return steps
+
+
 def recipe_steps(request, id):
     recipe = get_object_or_404(Recipe, id=id)
-    steps = [s.strip() for s in recipe.instructions.split('\n') if s.strip()]
+    steps = list(recipe.steps.all())  # Usar RecipeStep objects
+
+    if not steps:
+        parsed_steps = clean_steps(recipe.instructions)
+        steps = [SimpleNamespace(description=text, image=None, step_number=i + 1, title=f"Step {i + 1}")
+                 for i, text in enumerate(parsed_steps)]
+
     total = len(steps)
-    current = int(request.GET.get('step', 1))
-    current = max(1, min(current, total))
+    display_total = total if total > 0 else 1
+    try:
+        current = int(request.GET.get('step', 1))
+    except (TypeError, ValueError):
+        current = 1
+    current = max(1, min(current, display_total))
+    step = steps[current - 1] if steps else SimpleNamespace(description="No hay pasos disponibles.", image=None, step_number=1, title="Step 1")
+
     return render(request, "recipes/recipe_steps.html", {
         "recipe": recipe,
-        "step_text": steps[current - 1] if steps else "",
+        "step": step,
         "current": current,
-        "total": total,
+        "total": display_total,
         "has_prev": current > 1,
         "has_next": current < total,
         "prev_num": current - 1,

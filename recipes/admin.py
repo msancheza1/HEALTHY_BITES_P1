@@ -1,6 +1,13 @@
+
 from django.contrib import admin
 from .models import Recipe, RecipeStep, Favorite
 
-admin.site.register(Recipe)
-admin.site.register(RecipeStep)
+class RecipeStepInline(admin.TabularInline):
+    model = RecipeStep
+    extra = 1
+
+@admin.register(Recipe)
+class RecipeAdmin(admin.ModelAdmin):
+    inlines = [RecipeStepInline]
+
 admin.site.register(Favorite)

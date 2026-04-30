@@ -24,6 +24,7 @@ class RecipeStep(models.Model):
     step_number = models.PositiveIntegerField()
     title = models.CharField(max_length=200)
     description = models.TextField()
+    image = models.ImageField(upload_to='recipe_steps/', blank=True, null=True)  
 
     class Meta:
         ordering = ['step_number']
