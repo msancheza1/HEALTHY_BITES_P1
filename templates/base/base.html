@@ -42,14 +42,9 @@
         /* ---- BASE ---- */
         body {
             font-family: 'Poppins', sans-serif;
-<<<<<<< HEAD
-            background: linear-gradient(135deg, white);
-            min-height:100vh;
-=======
             background: var(--hb-bg);
             color: var(--hb-text-primary);
             min-height: 100vh;
->>>>>>> 587d65d364635f31e736c067a9f20b47518d9a6e
         }
 
         /* ---- LAYOUT ---- */
@@ -396,6 +391,15 @@
                             </a>
                         </li>
 
+                        <!-- Shopping List -->
+                        <li>
+                            <button class="dropdown-item w-100 text-start border-0 bg-transparent"
+                                    onclick="openShoppingList(); document.getElementById('userDropdown').closest('.dropdown').querySelector('[data-bs-toggle]').click();">
+                                <span class="item-icon" style="background:#E8F5E9;">🛒</span>
+                                Shopping List
+                            </button>
+                        </li>
+
                         <li><hr class="dropdown-divider"></li>
 
                         <!-- Logout -->
@@ -439,20 +443,10 @@
 
 
 <!-- FOOTER -->
-<<<<<<< HEAD
-<footer class="text-center mt-5 mb-3 text-muted">
-    <small>
-        © 2026 Healthy Bites
-    </small><br>
-    <small>
-        "Health in every recipe, balance in every dish"
-    </small>
-=======
 <footer class="text-center mt-5 mb-3">
     <small>Health in every recipe, balance in every dish.</small>
     
     <small>© 2026 Healthy Bites</small>
->>>>>>> 587d65d364635f31e736c067a9f20b47518d9a6e
 </footer>
 
 

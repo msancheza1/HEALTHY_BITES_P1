@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Recipe, Favorite  # ← agregar Favorite aquí
+from .models import Recipe, Favorite  
 from types import SimpleNamespace
+import json
+from django.http import JsonResponse
 
 
 def recipe_detail(request, id):
@@ -103,3 +105,21 @@ def search(request):
         "q": q,
         "recipes": results,
     })
+
+
+@login_required
+def shopping_list_json(request):
+    """
+    FR22 — Devuelve los ingredientes de favoritos como JSON para el drawer de la home.
+    """
+    favorites = Favorite.objects.filter(user=request.user).select_related('recipe')
+
+    recipes_data = []
+    for fav in favorites:
+        lines = [l.strip() for l in fav.recipe.ingredients.split('\n') if l.strip()]
+        recipes_data.append({
+            'name': fav.recipe.name,
+            'ingredients': lines,
+        })
+
+    return JsonResponse({'recipes': recipes_data})

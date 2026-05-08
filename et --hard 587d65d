@@ -1,0 +1,19 @@
+[33mca24635[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmariana[m[33m)[m HEAD@{0}: commit: remove db.sqlite3 from repo
+[33mc4ee9ad[m HEAD@{1}: rebase (finish): returning to refs/heads/mariana
+[33mc4ee9ad[m HEAD@{2}: rebase (pick): rama m
+[33m4c663a9[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{3}: pull origin main --rebase (start): checkout 4c663a9c0a40b9f638ab7bab17f2e5fdcaa78cfb
+[33m587d65d[m HEAD@{4}: commit (merge): color palett, favorites, step by step
+[33m50befa9[m[33m ([m[1;31morigin/mariana[m[33m)[m HEAD@{5}: commit: rama m
+[33mcda56df[m HEAD@{6}: commit (merge): remove database
+[33m9f7498c[m HEAD@{7}: commit: local
+[33mda64882[m HEAD@{8}: commit: arquitectura actualizada, funcionalidad step by step creada, busqueda organizada
+[33m9738cfe[m HEAD@{9}: pull origin main: Fast-forward
+[33m4f2ae85[m HEAD@{10}: commit: Informacion detallada del imc, rango
+[33m56ab306[m HEAD@{11}: pull origin main: Fast-forward
+[33m7dfdc7f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{12}: checkout: moving from mariana to mariana
+[33m7dfdc7f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{13}: checkout: moving from main to mariana
+[33m7dfdc7f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{14}: checkout: moving from mariana to main
+[33m7dfdc7f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{15}: pull origin main: Fast-forward
+[33m414ba17[m[33m ([m[1;31morigin/yilmar[m[33m, [m[1;31morigin/jose-luis[m[33m, [m[1;31morigin/jeronimo[m[33m, [m[1;31morigin/fabiola[m[33m, [m[1;32mfabiola[m[33m)[m HEAD@{16}: checkout: moving from fabiola to mariana
+[33m414ba17[m[33m ([m[1;31morigin/yilmar[m[33m, [m[1;31morigin/jose-luis[m[33m, [m[1;31morigin/jeronimo[m[33m, [m[1;31morigin/fabiola[m[33m, [m[1;32mfabiola[m[33m)[m HEAD@{17}: checkout: moving from main to fabiola
+[33m7dfdc7f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{18}: clone: from https://github.com/msancheza1/HEALTHY_BITES_P1.git
