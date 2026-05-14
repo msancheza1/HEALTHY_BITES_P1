@@ -3,34 +3,447 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-center align-items-center" style="min-height:70vh;">
+<style>
 
-    <div class="card shadow-lg p-4 auth-card" style="max-width:500px; border-radius:20px;">
+  /* ── Page wrapper ───────────────────────────────────── */
+  .profile-wrapper {
+    min-height: calc(100vh - 62px - 80px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 3rem 1rem 4rem;
+    gap: 2rem;
+  }
 
-         <div class="text-center">
-    <img src="{% static 'planner/images/Logo HB.png' %}" width="100" alt="Healthy Bites Logo">
-        </div>
+  /* ── Sidebar ────────────────────────────────────────── */
+  .profile-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+  }
 
+  .sidebar-user {
+    background: var(--hb-card);
+    border: 1px solid var(--hb-border);
+    border-radius: 16px;
+    padding: 1.75rem 1.25rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
 
-        <h2 class="text-center text-success mb-4">
-            Complete Your Profile
-        </h2>
+  .sidebar-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--hb-green-dark);
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.9rem;
+    font-family: var(--font-body);
+    letter-spacing: 1px;
+  }
 
-        <form method="post">
+  .sidebar-name {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--hb-text-primary);
+    margin-bottom: 3px;
+  }
 
-            {% csrf_token %}
+  .sidebar-label {
+    font-size: 12px;
+    color: var(--hb-text-muted);
+  }
 
-            {{ form.as_p }}
+  .sidebar-divider {
+    border: none;
+    border-top: 1px solid var(--hb-border);
+    margin: 1.25rem 0;
+  }
 
-            <button type="submit"
-                    class="btn btn-success w-100 mt-3">
-                Save Profile
-            </button>
+  .sidebar-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    padding: 4px 0;
+    color: var(--hb-text-muted);
+  }
 
-        </form>
+  .sidebar-stat strong {
+    color: var(--hb-text-primary);
+    font-size: 13.5px;
+    font-weight: 600;
+  }
 
+  /* ── Main card ──────────────────────────────────────── */
+  .profile-card {
+    flex: 1;
+    max-width: 560px;
+    background: var(--hb-card);
+    border-radius: 20px;
+    border: 1px solid var(--hb-border);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  .profile-card-header {
+    padding: 1.75rem 2rem 1.5rem;
+    border-bottom: 1px solid var(--hb-border);
+    background: var(--hb-surface);
+  }
+
+  .profile-card-header h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--hb-text-primary);
+    letter-spacing: -0.3px;
+    margin: 0 0 3px;
+    font-family: var(--font-body);
+  }
+
+  .profile-card-header p {
+    font-size: 13px;
+    color: var(--hb-text-muted);
+    margin: 0;
+  }
+
+  .profile-card-body {
+    padding: 1.75rem 2rem 2rem;
+  }
+
+  /* ── Section label ──────────────────────────────────── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--hb-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 0.75rem;
+    display: block;
+    font-family: var(--font-body);
+  }
+
+  /* ── Metrics row ────────────────────────────────────── */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .metric-field label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--hb-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 5px;
+    display: block;
+    font-family: var(--font-body);
+  }
+
+  .metric-field input[type="number"],
+  .metric-field input[type="text"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--hb-border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: var(--font-body);
+    color: var(--hb-text-primary);
+    background: var(--hb-surface);
+    transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+    outline: none;
+  }
+
+  .metric-field input:focus {
+    border-color: var(--hb-green-mid);
+    box-shadow: 0 0 0 3px rgba(46,125,91,0.1);
+    background: #fff;
+  }
+
+  /* ── Conditions grid ────────────────────────────────── */
+  .conditions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .condition-card {
+    position: relative;
+    border-radius: 13px;
+    padding: 14px 14px 13px;
+    cursor: pointer;
+    border: 1.5px solid var(--hb-border);
+    background: var(--hb-surface);
+    transition: border-color 0.18s, background 0.18s, transform 0.15s, box-shadow 0.18s;
+    user-select: none;
+  }
+
+  .condition-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .condition-card input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .condition-emoji {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 7px;
+    line-height: 1;
+  }
+
+  .condition-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--hb-text-primary);
+    display: block;
+    line-height: 1.2;
+    margin-bottom: 3px;
+    font-family: var(--font-body);
+  }
+
+  .condition-desc {
+    font-size: 11.5px;
+    color: var(--hb-text-muted);
+    line-height: 1.4;
+  }
+
+  /* Checkmark */
+  .condition-check {
+    position: absolute;
+    top: 11px;
+    right: 11px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--hb-border);
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: transparent;
+    transition: all 0.18s;
+  }
+
+  /* Active states */
+  .condition-card.cond-vegetarian.active {
+    border-color: #43A047;
+    background: #F1FBF3;
+  }
+  .condition-card.cond-vegetarian.active .condition-check {
+    background: #43A047; border-color: #43A047; color: #fff;
+  }
+  .condition-card.cond-vegetarian:not(.active):hover { border-color: #A5D6A7; }
+
+  .condition-card.cond-lactose.active {
+    border-color: #1E88E5;
+    background: #EFF7FF;
+  }
+  .condition-card.cond-lactose.active .condition-check {
+    background: #1E88E5; border-color: #1E88E5; color: #fff;
+  }
+  .condition-card.cond-lactose:not(.active):hover { border-color: #90CAF9; }
+
+  .condition-card.cond-gluten.active {
+    border-color: #E64A19;
+    background: #FFF4F1;
+  }
+  .condition-card.cond-gluten.active .condition-check {
+    background: #E64A19; border-color: #E64A19; color: #fff;
+  }
+  .condition-card.cond-gluten:not(.active):hover { border-color: #FFAB91; }
+
+  .condition-card.cond-diabetes.active {
+    border-color: #6A3FB5;
+    background: #F5F0FF;
+  }
+  .condition-card.cond-diabetes.active .condition-check {
+    background: #6A3FB5; border-color: #6A3FB5; color: #fff;
+  }
+  .condition-card.cond-diabetes:not(.active):hover { border-color: #B39DDB; }
+
+  /* ── Submit ─────────────────────────────────────────── */
+  .btn-save {
+    background: var(--hb-green-dark);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: background 0.18s, transform 0.15s;
+    letter-spacing: 0.1px;
+  }
+
+  .btn-save:hover {
+    background: var(--hb-green-mid);
+    transform: translateY(-1px);
+  }
+
+  /* ── Success message ────────────────────────────────── */
+  .profile-success {
+    background: #EDF7F2;
+    border: 1px solid #A5D6C0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--hb-green-dark);
+    margin-bottom: 1.25rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 720px) {
+    .profile-wrapper {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .profile-sidebar {
+      width: 100%;
+    }
+  }
+
+</style>
+
+<div class="profile-wrapper">
+
+  <!-- Sidebar -->
+  <aside class="profile-sidebar">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">{{ user.username|slice:":2"|upper }}</div>
+      <div class="sidebar-name">{{ user.username }}</div>
+      <div class="sidebar-label">Member</div>
+
+      {% if profile %}
+        <hr class="sidebar-divider">
+        {% if profile.weight %}
+          <div class="sidebar-stat">
+            <span>Weight</span>
+            <strong>{{ profile.weight }} kg</strong>
+          </div>
+        {% endif %}
+        {% if profile.height %}
+          <div class="sidebar-stat">
+            <span>Height</span>
+            <strong>{{ profile.height }} cm</strong>
+          </div>
+        {% endif %}
+        {% if profile.bmi %}
+          <div class="sidebar-stat">
+            <span>BMI</span>
+            <strong>{{ profile.bmi|floatformat:1 }}</strong>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </aside>
+
+  <!-- Main card -->
+  <div class="profile-card">
+
+    <div class="profile-card-header">
+      <h2>Your Profile</h2>
+      <p>Keep your information up to date to receive the best recipe recommendations.</p>
     </div>
 
+    <div class="profile-card-body">
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="profile-success">✓ {{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <!-- Metrics -->
+        <span class="section-label">Body metrics</span>
+        <div class="metrics-row">
+          <div class="metric-field">
+            <label for="{{ form.weight.id_for_label }}">{{ form.weight.label }}</label>
+            {{ form.weight }}
+          </div>
+          <div class="metric-field">
+            <label for="{{ form.height.id_for_label }}">{{ form.height.label }}</label>
+            {{ form.height }}
+          </div>
+        </div>
+
+        <!-- Conditions -->
+        <span class="section-label">Dietary conditions</span>
+        <div class="conditions-grid">
+
+          <label class="condition-card cond-vegetarian {% if form.vegetarian.value %}active{% endif %}">
+            {{ form.vegetarian }}
+            <span class="condition-emoji">🥦</span>
+            <span class="condition-name">Vegetarian</span>
+            <span class="condition-desc">No meat or fish in your diet</span>
+            <span class="condition-check">✓</span>
+          </label>
+
+          <label class="condition-card cond-lactose {% if form.lactose_intolerant.value %}active{% endif %}">
+            {{ form.lactose_intolerant }}
+            <span class="condition-emoji">🥛</span>
+            <span class="condition-name">Lactose intolerant</span>
+            <span class="condition-desc">Avoid dairy products</span>
+            <span class="condition-check">✓</span>
+          </label>
+
+          <label class="condition-card cond-gluten {% if form.gluten_intolerant.value %}active{% endif %}">
+            {{ form.gluten_intolerant }}
+            <span class="condition-emoji">🌾</span>
+            <span class="condition-name">Gluten intolerant</span>
+            <span class="condition-desc">Wheat, barley & rye free</span>
+            <span class="condition-check">✓</span>
+          </label>
+
+          <label class="condition-card cond-diabetes {% if form.diabetes.value %}active{% endif %}">
+            {{ form.diabetes }}
+            <span class="condition-emoji">🩸</span>
+            <span class="condition-name">Diabetes</span>
+            <span class="condition-desc">Low sugar & GI control</span>
+            <span class="condition-check">✓</span>
+          </label>
+
+        </div>
+
+        <button type="submit" class="btn-save">Save changes</button>
+
+      </form>
+    </div>
+  </div>
+
 </div>
+
+<script>
+  document.querySelectorAll('.condition-card').forEach(card => {
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    card.addEventListener('click', () => {
+      setTimeout(() => {
+        card.classList.toggle('active', checkbox.checked);
+      }, 0);
+    });
+  });
+</script>
 
 {% endblock %}

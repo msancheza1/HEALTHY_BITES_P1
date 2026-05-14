@@ -9,8 +9,8 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts: DM Sans + DM Serif Display -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -18,108 +18,172 @@
     <style>
 
         /* =============================================
-           HEALTHY BITES — COLOR SYSTEM
+           HEALTHY BITES — DESIGN SYSTEM
            ============================================= */
 
         :root {
-            --hb-green-dark:   #2E7D5B;
-            --hb-green-mid:    #3a9e72;
-            --hb-green-light:  #6FCF97;
-            --hb-green-pale:   #E8F5E9;
-            --hb-bg:           #FFFFFF;
-            --hb-surface:      #F4FBF7;
+            --hb-green-dark:   #1B5E42;
+            --hb-green-mid:    #2E7D5B;
+            --hb-green-light:  #52A882;
+            --hb-green-pale:   #EDF7F2;
+            --hb-bg:           #FAFAF8;
+            --hb-surface:      #F5F5F2;
             --hb-card:         #FFFFFF;
-            --hb-text-primary: #1F2933;
-            --hb-text-muted:   #6B7280;
-            --hb-border:       #E5E7EB;
-            --hb-yellow:       #F2C94C;
-            --hb-yellow-text:  #92650a;
-            --hb-success:      #27AE60;
-            --hb-error:        #EB5757;
-            --hb-warning:      #F2994A;
+            --hb-text-primary: #161614;
+            --hb-text-muted:   #787870;
+            --hb-border:       #E8E8E4;
+            --hb-yellow:       #E8B84B;
+            --hb-yellow-text:  #7A5B18;
+            --hb-success:      #2E7D5B;
+            --hb-error:        #C0392B;
+            --hb-warning:      #D4821A;
+
+            /* Typography */
+            --font-body: 'DM Sans', sans-serif;
+            --font-display: 'DM Serif Display', serif;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.07), 0 2px 6px rgba(0,0,0,0.04);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.09), 0 4px 12px rgba(0,0,0,0.05);
         }
 
         /* ---- BASE ---- */
+        *, *::before, *::after { box-sizing: border-box; }
+
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: var(--font-body);
             background: var(--hb-bg);
             color: var(--hb-text-primary);
             min-height: 100vh;
+            font-size: 15px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* ---- LAYOUT ---- */
         .main-container {
-            max-width: 1100px;
+            max-width: 1160px;
             margin: auto;
         }
 
         /* =============================================
-           NAVBAR — fondo verde profesional
+           NAVBAR
            ============================================= */
         .navbar {
             border-radius: 0;
             background: var(--hb-green-dark) !important;
             border-bottom: none;
-            padding: 10px 0;
+            padding: 0;
+            height: 62px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.06), var(--shadow-md);
         }
 
-        .navbar-brand span {
+        .navbar > .container {
+            height: 100%;
+            gap: 20px;
+        }
+
+        /* Brand */
+        .navbar-brand {
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand .brand-img {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            object-fit: cover;
+            border: 1.5px solid rgba(255,255,255,0.18);
+        }
+
+        .navbar-brand .brand-name {
             color: #ffffff;
             font-weight: 600;
+            font-size: 15.5px;
+            letter-spacing: -0.2px;
+            font-family: var(--font-body);
         }
 
-        /* Search bar dentro del navbar */
-        .navbar .search-input {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        /* Search */
+        .navbar-search {
+            flex: 1;
+            max-width: 380px;
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .navbar-search:focus-within {
+            background: rgba(255,255,255,0.17);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .navbar-search .search-input {
+            background: transparent;
+            border: none;
             color: #fff;
-            border-radius: 8px 0 0 8px;
-            padding: 6px 12px;
-            font-size: 13px;
+            padding: 0 14px;
+            font-size: 13.5px;
+            font-family: var(--font-body);
+            height: 36px;
+            flex: 1;
             outline: none;
-            transition: background 0.2s;
         }
 
-        .navbar .search-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+        .navbar-search .search-input::placeholder {
+            color: rgba(255,255,255,0.5);
         }
 
-        .navbar .search-input:focus {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.6);
-        }
-
-        .navbar .search-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-left: none;
-            color: #fff;
-            border-radius: 0 8px 8px 0;
-            padding: 6px 14px;
+        .navbar-search .search-btn {
+            background: rgba(255,255,255,0.13);
+            border: none;
+            border-left: 1px solid rgba(255,255,255,0.14);
+            color: rgba(255,255,255,0.85);
             font-size: 13px;
             font-weight: 500;
-            transition: background 0.2s;
+            font-family: var(--font-body);
+            height: 36px;
+            padding: 0 16px;
             cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
         }
 
-        .navbar .search-btn:hover {
-            background: rgba(255, 255, 255, 0.35);
+        .navbar-search .search-btn:hover {
+            background: rgba(255,255,255,0.22);
+            color: #fff;
         }
 
-        /* Botones de login/register en navbar */
+        /* Auth buttons */
         .btn-nav-login {
             background: transparent;
-            border: 1.5px solid rgba(255,255,255,0.7);
-            color: #fff;
+            border: 1.5px solid rgba(255,255,255,0.45);
+            color: rgba(255,255,255,0.9);
             border-radius: 8px;
             font-size: 13px;
             font-weight: 500;
-            padding: 5px 16px;
-            transition: background 0.2s;
+            font-family: var(--font-body);
+            padding: 6px 18px;
+            text-decoration: none;
+            transition: background 0.18s, border-color 0.18s;
+            letter-spacing: 0.1px;
         }
 
         .btn-nav-login:hover {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.7);
             color: #fff;
         }
 
@@ -130,93 +194,114 @@
             border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
-            padding: 5px 16px;
-            transition: opacity 0.2s;
+            font-family: var(--font-body);
+            padding: 6px 18px;
+            text-decoration: none;
+            transition: opacity 0.18s, transform 0.15s;
+            letter-spacing: 0.1px;
         }
 
         .btn-nav-register:hover {
-            opacity: 0.9;
+            opacity: 0.92;
             color: var(--hb-green-dark);
+            transform: translateY(-1px);
         }
 
-        /* ---- AVATAR / DROPDOWN ---- */
+        /* Avatar */
         .user-avatar-btn {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255,255,255,0.15);
+            border: 1.5px solid rgba(255,255,255,0.35);
             color: #fff;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
+            font-family: var(--font-body);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.15s;
             text-decoration: none;
+            letter-spacing: 0.5px;
         }
 
         .user-avatar-btn:hover,
         .user-avatar-btn:focus {
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255,255,255,0.28);
             color: #fff;
+            transform: translateY(-1px);
         }
 
-        /* Dropdown menú de usuario */
+        /* Dropdown */
         .user-dropdown-menu {
             border-radius: 14px;
-            border: 0.5px solid var(--hb-border);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+            border: 1px solid var(--hb-border);
+            box-shadow: var(--shadow-lg);
             padding: 6px;
-            min-width: 190px;
-            margin-top: 8px !important;
+            min-width: 200px;
+            margin-top: 10px !important;
+            background: #fff;
+        }
+
+        .user-dropdown-menu .dropdown-username {
+            padding: 8px 12px 10px;
+            font-size: 12px;
+            color: var(--hb-text-muted);
+            font-weight: 500;
+            border-bottom: 1px solid var(--hb-border);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .user-dropdown-menu .dropdown-item {
-            border-radius: 8px;
-            font-size: 13px;
+            border-radius: 9px;
+            font-size: 13.5px;
             padding: 8px 12px;
             color: var(--hb-text-primary);
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: background 0.15s;
+            transition: background 0.13s;
+            font-family: var(--font-body);
         }
 
         .user-dropdown-menu .dropdown-item:hover {
             background: var(--hb-surface);
         }
 
-        .user-dropdown-menu .dropdown-item .item-icon {
+        .item-icon {
             width: 28px;
             height: 28px;
-            border-radius: 6px;
+            border-radius: 7px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 13px;
             flex-shrink: 0;
         }
 
         .item-icon-green  { background: var(--hb-green-pale); }
-        .item-icon-yellow { background: #FFF8E1; }
-        .item-icon-red    { background: #FFEBEE; }
+        .item-icon-yellow { background: #FEF9EC; }
+        .item-icon-red    { background: #FEF0EF; }
 
-        .dropdown-logout {
-            color: var(--hb-error) !important;
-        }
+        .dropdown-logout { color: var(--hb-error) !important; }
 
         .dropdown-divider {
             margin: 4px 0;
             border-color: var(--hb-border);
         }
 
-        /* ---- BOTONES GENERALES ---- */
+        /* ---- BUTTONS ---- */
         .btn-success {
             background: var(--hb-green-dark) !important;
             border-color: var(--hb-green-dark) !important;
             color: #fff !important;
+            font-family: var(--font-body);
+            font-weight: 500;
         }
 
         .btn-success:hover {
@@ -227,6 +312,7 @@
         .btn-outline-success {
             color: var(--hb-green-dark);
             border-color: var(--hb-green-dark);
+            font-family: var(--font-body);
         }
 
         .btn-outline-success:hover {
@@ -235,40 +321,18 @@
             color: #fff;
         }
 
-        .btn-outline-warning {
-            color: var(--hb-yellow-text);
-            border-color: var(--hb-yellow);
-        }
-
-        .btn-outline-warning:hover {
-            background: var(--hb-yellow);
-            border-color: var(--hb-yellow);
-            color: var(--hb-yellow-text);
-        }
-
-        .btn-outline-danger {
-            color: var(--hb-error);
-            border-color: var(--hb-error);
-        }
-
-        .btn-outline-danger:hover {
-            background: var(--hb-error);
-            border-color: var(--hb-error);
-            color: #fff;
-        }
-
         /* ---- RECIPE CARD ---- */
         .recipe-card {
             background: var(--hb-card);
-            border-radius: 16px;
+            border-radius: 14px;
             border: 1px solid var(--hb-border) !important;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
             overflow: hidden;
         }
 
         .recipe-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 28px rgba(46, 125, 91, 0.12) !important;
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg) !important;
         }
 
         .recipe-card .card-title a {
@@ -276,33 +340,52 @@
             font-weight: 500;
         }
 
-        /* ---- TEXTO ---- */
-        .text-muted {
-            color: var(--hb-text-muted) !important;
-        }
+        /* ---- TEXT ---- */
+        .text-muted { color: var(--hb-text-muted) !important; }
+        .text-success { color: var(--hb-green-dark) !important; }
 
-        .text-success {
-            color: var(--hb-green-dark) !important;
-        }
-
-        /* ---- ESTADOS FEEDBACK ---- */
-        .alert-success { border-left: 4px solid var(--hb-success); }
-        .alert-danger  { border-left: 4px solid var(--hb-error); }
-        .alert-warning { border-left: 4px solid var(--hb-warning); }
+        /* ---- ALERTS ---- */
+        .alert-success { border-left: 3px solid var(--hb-success); }
+        .alert-danger  { border-left: 3px solid var(--hb-error); }
+        .alert-warning { border-left: 3px solid var(--hb-warning); }
 
         /* ---- FOOTER ---- */
         footer {
             color: var(--hb-text-muted);
-            font-size: 13px;
+            font-size: 12.5px;
             border-top: 1px solid var(--hb-border);
-            padding-top: 16px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            margin-top: 60px;
+        }
+
+        footer .footer-inner {
+            max-width: 1160px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0 16px;
+        }
+
+        footer .footer-brand {
+            font-weight: 600;
+            color: var(--hb-green-dark);
+            font-size: 13px;
+        }
+
+        footer .footer-tagline {
+            font-style: italic;
+            opacity: 0.75;
         }
 
         /* ---- BMI BANNER ---- */
         #bmi-banner-top {
             background: var(--hb-green-pale);
-            border: 1px solid #a5d6a7;
-            border-radius: 10px 10px 10px 10px;
+            border: 1px solid #B2DFCB;
+            border-radius: 10px;
         }
 
     </style>
@@ -313,69 +396,54 @@
 <!-- ==========================================
      NAVBAR
      ========================================== -->
-<nav class="navbar navbar-expand-lg shadow-sm mb-4">
+<nav class="navbar navbar-expand-lg">
     <div class="container">
 
         <!-- Logo + Brand -->
-        <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+        <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'planner/images/LogoHB.jpeg' %}"
                  alt="Healthy Bites Logo"
-                 width="48"
-                 height="48"
-                 class="me-2"
-                 style="border-radius: 10px; object-fit: cover;">
-            <span class="fw-bold" style="color: #fff; font-size: 17px;">
-                Healthy Bites
-            </span>
+                 class="brand-img">
+            <span class="brand-name">Healthy Bites</span>
         </a>
 
         <!-- Search -->
-        <form class="d-flex align-items-center me-3 flex-grow-1"
+        <form class="navbar-search flex-grow-1"
               method="get"
-              action="{% url 'recipes:search' %}"
-              style="max-width: 400px;">
-            <input class="search-input form-control-sm flex-grow-1"
+              action="{% url 'recipes:search' %}">
+            <input class="search-input"
                    type="search"
                    name="q"
                    placeholder="Search recipes..."
                    aria-label="Search"
-                   value="{{ request.GET.q|default:'' }}"
-                   style="height: 36px;">
-            <button class="search-btn" type="submit" style="height: 36px;">
-                Search
-            </button>
+                   value="{{ request.GET.q|default:'' }}">
+            <button class="search-btn" type="submit">Search</button>
         </form>
 
-        <!-- Acciones de usuario -->
+        <!-- User actions -->
         <div class="d-flex align-items-center gap-2">
 
             {% if user.is_authenticated %}
 
-                <!-- Avatar con dropdown -->
                 <div class="dropdown">
                     <a class="user-avatar-btn dropdown-toggle"
                        href="#"
                        role="button"
                        id="userDropdown"
                        data-bs-toggle="dropdown"
-                       aria-expanded="false"
-                       title="Menu"
-                       style="text-decoration: none;">
+                       aria-expanded="false">
                         {{ user.username|slice:":2"|upper }}
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu"
                         aria-labelledby="userDropdown">
 
-                        <!-- Saludo -->
                         <li>
-                            <span class="d-block px-3 py-2"
-                                  style="font-size: 12px; color: var(--hb-text-muted); font-weight: 500; border-bottom: 0.5px solid var(--hb-border); margin-bottom: 4px;">
+                            <span class="dropdown-username">
                                 👋 {{ user.username }}
                             </span>
                         </li>
 
-                        <!-- Perfil -->
                         <li>
                             <a class="dropdown-item" href="{% url 'profile' %}">
                                 <span class="item-icon item-icon-green">👤</span>
@@ -383,7 +451,6 @@
                             </a>
                         </li>
 
-                        <!-- Favoritos -->
                         <li>
                             <a class="dropdown-item" href="{% url 'recipes:my_favorites' %}">
                                 <span class="item-icon item-icon-yellow">⭐</span>
@@ -391,18 +458,8 @@
                             </a>
                         </li>
 
-                        <!-- Shopping List -->
-                        <li>
-                            <button class="dropdown-item w-100 text-start border-0 bg-transparent"
-                                    onclick="openShoppingList(); document.getElementById('userDropdown').closest('.dropdown').querySelector('[data-bs-toggle]').click();">
-                                <span class="item-icon" style="background:#E8F5E9;">🛒</span>
-                                Shopping List
-                            </button>
-                        </li>
-
                         <li><hr class="dropdown-divider"></li>
 
-                        <!-- Logout -->
                         <li>
                             <form action="{% url 'logout' %}" method="post" class="d-inline w-100">
                                 {% csrf_token %}
@@ -419,34 +476,30 @@
 
             {% else %}
 
-                <!-- Solo visible si NO está autenticado -->
-                <a class="btn-nav-login" href="{% url 'login' %}">
-                    Login
-                </a>
-                <a class="btn-nav-register" href="{% url 'register' %}">
-                    Register
-                </a>
+                <a class="btn-nav-login" href="{% url 'login' %}">Login</a>
+                <a class="btn-nav-register" href="{% url 'register' %}">Register</a>
 
             {% endif %}
 
         </div>
-
     </div>
 </nav>
 
 
-<!-- CONTENIDO -->
-<div class="container main-container">
+<!-- CONTENT -->
+<div class="container main-container pt-4">
     {% block content %}
     {% endblock %}
 </div>
 
 
 <!-- FOOTER -->
-<footer class="text-center mt-5 mb-3">
-    <small>Health in every recipe, balance in every dish.</small>
-    
-    <small>© 2026 Healthy Bites</small>
+<footer>
+    <div class="footer-inner">
+        <span class="footer-brand">Healthy Bites</span>
+        <span class="footer-tagline">"Health in every recipe, balance in every dish."</span>
+        <span>© 2026 Healthy Bites. All rights reserved.</span>
+    </div>
 </footer>
 
 
@@ -460,7 +513,7 @@
   data-id="c58bfaaf-b36d-4e19-b955-e1a13ef4a3f1"
   data-company="HealthyBites"
   data-avatar-initials="HB"
-  data-theme-config='{"colors":{"primary":"#2E7D5B","accent":"#2E7D5B","sendButton":"#2E7D5B","sendButtonHover":"#1f5c3f","text":"#1F2933","textSecondary":"#6B7280","background":"#FFFFFF","backgroundChat":"#F4FBF7","userMessageBg":"rgba(46,125,91,0.10)","userMessageText":"#2E7D5B","agentMessageBg":"#F4FBF7","agentMessageText":"#1F2933","border":"#E5E7EB","hover":"rgba(46,125,91,0.08)","timestamp":"#9CA3AF","icon":"#6B7280","inputBackground":"#FFFFFF","inputPlaceholder":"#9CA3AF"},"spacing":{"borderRadius":"16px","messageBorderRadius":"12px"}}'
+  data-theme-config='{"colors":{"primary":"#1B5E42","accent":"#1B5E42","sendButton":"#1B5E42","sendButtonHover":"#0f3d2a","text":"#161614","textSecondary":"#787870","background":"#FFFFFF","backgroundChat":"#F5F5F2","userMessageBg":"rgba(27,94,66,0.09)","userMessageText":"#1B5E42","agentMessageBg":"#F5F5F2","agentMessageText":"#161614","border":"#E8E8E4","hover":"rgba(27,94,66,0.07)","timestamp":"#9CA3AF","icon":"#787870","inputBackground":"#FFFFFF","inputPlaceholder":"#9CA3AF"},"spacing":{"borderRadius":"14px","messageBorderRadius":"10px"}}'
   data-faq='["No se que comer ¿que me recomiendas?"]'
 ></script>
 
