@@ -47,9 +47,9 @@ db.sqlite3
 .env.*.local
 
 # Static and Media files
-staticfiles/
-media/
-/static/
+#staticfiles/
+#media/
+#/static/
 
 # Testing
 .coverage
