@@ -17,9 +17,7 @@
 
     <style>
 
-        /* =============================================
-           HEALTHY BITES — DESIGN SYSTEM
-           ============================================= */
+  
 
         :root {
             --hb-green-dark:   #1B5E42;
@@ -48,7 +46,7 @@
             --shadow-lg: 0 12px 40px rgba(0,0,0,0.09), 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        /* ---- BASE ---- */
+    
         *, *::before, *::after { box-sizing: border-box; }
 
         body {
@@ -67,9 +65,7 @@
             margin: auto;
         }
 
-        /* =============================================
-           NAVBAR
-           ============================================= */
+       
         .navbar {
             border-radius: 0;
             background: var(--hb-green-dark) !important;
@@ -393,9 +389,7 @@
 
 <body>
 
-<!-- ==========================================
-     NAVBAR
-     ========================================== -->
+
 <nav class="navbar navbar-expand-lg">
     <div class="container">
 
@@ -458,6 +452,14 @@
                             </a>
                         </li>
 
+
+                        <li>
+                            <button class="dropdown-item w-100 text-start border-0 bg-transparent"
+                                    onclick="if(typeof openShoppingList==='function') openShoppingList()">
+                                <span class="item-icon item-icon-green">🛒</span>
+                                Shopping List
+                            </button>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
 
                         <li>
